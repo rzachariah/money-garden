@@ -1,0 +1,9 @@
+node_modules/
+out/
+data/*.csv
+!data/sample_transactions.csv
+data/sample_transactions.private.csv
+.cursor/
+config/budgets.private.json
+
+

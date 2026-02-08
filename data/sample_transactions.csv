@@ -1,0 +1,22 @@
+Date,Merchant,Category,Account,Original Statement,Notes,Amount,Tags,Owner
+2026-01-31,Vendor A,Child Care,Checking (...0001),PAYMENT TO VENDOR A,, -200.00,,Shared
+2026-01-30,Vendor B,Software / Productivity apps,Credit Card (...0002),SOFTWARE CHARGE,, -21.25,,Person A
+2026-01-30,Transit Service,Parking & Tolls,Credit Card (...0002),TOLL PAYMENT,, -55.00,,Shared
+2026-01-30,Grocery Store,Groceries,Credit Card (...0003),GROCERY STORE,, -89.45,,Shared
+2026-01-29,Coffee Shop,Coffee Shops,Credit Card (...0003),COFFEE SHOP,, -6.75,,Person A
+2026-01-28,Transfer,Personal,Checking (...0001),ALLOWANCE TRANSFER,, -300.00,,Shared
+2026-01-27,Travel Service,Travel & Vacation,Credit Card (...0004),TRAVEL CHARGE,, -312.80,,Shared
+2026-01-26,Neighborhood Market,Groceries,Checking (...0001),GROCERY RUN,, -124.30,,Shared
+2026-01-25,Restaurant,Restaurants & Bars,Credit Card (...0003),DINNER,, -72.10,,Shared
+2026-01-24,Utility Provider,Gas & Electric,Checking (...0001),UTILITY BILL,, -118.64,,Shared
+2026-01-23,Fitness Studio,Fitness,Credit Card (...0003),GYM MEMBERSHIP,, -45.00,,Person A
+2026-01-22,Insurance Provider,Insurance,Checking (...0001),INSURANCE PAYMENT,, -267.75,,Shared
+2026-01-21,Mortgage Provider,Mortgage,Checking (...0001),MORTGAGE PAYMENT,, -2692.84,,Shared
+2026-01-20,Home Store,Home Improvement,Credit Card (...0003),HOME IMPROVEMENT,, -150.00,,Shared
+2026-01-19,Child Activity,Child Activities,Checking (...0001),CHILD ACTIVITY,, -85.00,,Shared
+2026-01-18,Medical Clinic,Medical,Checking (...0001),MEDICAL VISIT,, -75.50,,Shared
+2026-01-17,Gas Station,Gas,Credit Card (...0003),FUEL,, -44.89,,Shared
+2026-01-16,Subscription,Software / Productivity apps,Credit Card (...0003),SUBSCRIPTION,, -12.99,,Shared
+2026-01-15,Ride Share,Taxi & Ride Shares,Credit Card (...0003),RIDESHARE,, -18.45,,Shared
+2026-01-14,Home Goods,Furniture & Housewares,Credit Card (...0003),FURNITURE,, -209.60,,Shared
+
