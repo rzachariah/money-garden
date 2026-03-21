@@ -1,7 +1,10 @@
 const cdk = require("aws-cdk-lib");
+const acm = require("aws-cdk-lib/aws-certificatemanager");
 const ec2 = require("aws-cdk-lib/aws-ec2");
 const ecs = require("aws-cdk-lib/aws-ecs");
 const ecsPatterns = require("aws-cdk-lib/aws-ecs-patterns");
+const route53 = require("aws-cdk-lib/aws-route53");
+const targets = require("aws-cdk-lib/aws-route53-targets");
 
 class MoneyGardenStack extends cdk.Stack {
   constructor(scope, id, props) {
@@ -28,6 +31,18 @@ class MoneyGardenStack extends cdk.Stack {
       default: "/sign-up"
     });
 
+    const hostedZone = route53.HostedZone.fromHostedZoneAttributes(this, "HostedZone", {
+      hostedZoneId: "Z06009943OINXQBYFNK47",
+      zoneName: "ranjithzachariah.com"
+    });
+
+    const domainName = "moneygarden.ranjithzachariah.com";
+
+    const certificate = new acm.Certificate(this, "Certificate", {
+      domainName,
+      validation: acm.CertificateValidation.fromDns(hostedZone)
+    });
+
     const vpc = new ec2.Vpc(this, "Vpc", {
       maxAzs: 2,
       natGateways: 0,
@@ -45,6 +60,10 @@ class MoneyGardenStack extends cdk.Stack {
     const service = new ecsPatterns.ApplicationLoadBalancedFargateService(this, "Web", {
       cluster,
       publicLoadBalancer: true,
+      domainName,
+      domainZone: hostedZone,
+      certificate,
+      redirectHTTP: true,
       assignPublicIp: true,
       desiredCount: 1,
       cpu: 512,
@@ -74,7 +93,17 @@ class MoneyGardenStack extends cdk.Stack {
       healthyHttpCodes: "200-399"
     });
 
+    new route53.ARecord(this, "AliasRecord", {
+      zone: hostedZone,
+      recordName: "moneygarden",
+      target: route53.RecordTarget.fromAlias(new targets.LoadBalancerTarget(service.loadBalancer))
+    });
+
     new cdk.CfnOutput(this, "AppUrl", {
+      value: `https://${domainName}`
+    });
+
+    new cdk.CfnOutput(this, "AlbUrl", {
       value: `http://${service.loadBalancer.loadBalancerDnsName}`
     });
   }
