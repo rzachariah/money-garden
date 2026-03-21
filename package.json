@@ -2,16 +2,20 @@
   "name": "money-garden",
   "private": true,
   "version": "0.1.0",
-  "description": "Money Garden MVP - weekly SMS preview generator",
+  "description": "Money Garden web app for upload-based transaction analysis",
   "scripts": {
+    "dev": "next dev",
+    "build": "next build",
     "preview": "node src/cli/preview.js",
     "monthly-preview": "node src/cli/monthlyPreview.js",
-    "start": "node src/server.js"
+    "start": "next start"
   },
   "dependencies": {
+    "@clerk/nextjs": "^7.0.4",
     "csv-parse": "^5.5.6",
     "date-fns": "^3.6.0",
-    "express": "^4.19.2"
+    "next": "^16.1.6",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4"
   }
 }
-

@@ -99,6 +99,7 @@ function buildMonthlySummary(sharedTx, config, monthStart, monthEnd) {
 }
 
 function buildMonthlyEmailText(summary) {
+  const planTitle = `${summary.monthLabel} gentle plan:`;
   const lines = [
     `Money Garden - ${summary.monthLabel} Summary`,
     "",
@@ -117,7 +118,7 @@ function buildMonthlyEmailText(summary) {
       (item) => `- ${item.name}: ${formatCurrency(item.total)}`
     ),
     "",
-    "February gentle plan:",
+    planTitle,
     "- Trader Joe's-first baseline shop (protein + frozen + staples)",
     "- 0-1 Whole Foods trip for joy items only",
     "- No midweek emergency grocery runs",
@@ -130,6 +131,7 @@ function buildMonthlyEmailText(summary) {
 }
 
 function buildMonthlyEmailHtml(summary) {
+  const planTitle = `${summary.monthLabel} gentle plan`;
   const categoryRows = summary.topCategories
     .map(
       (item) =>
@@ -207,7 +209,7 @@ function buildMonthlyEmailHtml(summary) {
             </td>
           </tr>
           <tr>
-            <td style="padding-top:24px;font-size:16px;font-weight:600;">February gentle plan</td>
+            <td style="padding-top:24px;font-size:16px;font-weight:600;">${planTitle}</td>
           </tr>
           <tr>
             <td style="padding-top:8px;font-size:15px;line-height:1.6;color:#445148;">
@@ -242,4 +244,3 @@ module.exports = {
   buildMonthlyEmailHtml,
   buildMonthlyEmailText
 };
-

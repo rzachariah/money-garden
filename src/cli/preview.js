@@ -4,12 +4,8 @@ const path = require("path");
 const { readCsv } = require("../ingest/readCsv");
 const { classifyTransaction } = require("../budget/classify");
 const { buildWeeklyDigests } = require("../digest/weeklyDigest");
+const { loadBudgetConfig } = require("../config/loadBudgetConfig");
 const { getWeekStartsOn, getWeeksBetween } = require("../utils/date");
-
-function loadConfig() {
-  const configPath = path.resolve(process.cwd(), "config", "budgets.json");
-  return JSON.parse(fs.readFileSync(configPath, "utf8"));
-}
 
 function findLatestCsv(dataDir) {
   const files = fs
@@ -44,7 +40,7 @@ function writeDigestFiles(week, digests, outputDir) {
 }
 
 function main() {
-  const config = loadConfig();
+  const config = loadBudgetConfig();
   const dataDir = path.resolve(process.cwd(), "data");
   const outputDir = path.resolve(process.cwd(), "out");
   if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir, { recursive: true });
@@ -78,5 +74,4 @@ function main() {
 }
 
 main();
-
 

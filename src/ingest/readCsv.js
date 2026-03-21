@@ -1,23 +1,24 @@
 const fs = require("fs");
 const { parse } = require("csv-parse/sync");
-const { parse: parseDate } = require("date-fns");
+const { isValid, parse: parseDate } = require("date-fns");
 
 function parseAmount(value) {
   const normalized = String(value || "").replace(/,/g, "").trim();
   const amount = Number.parseFloat(normalized);
-  return Number.isFinite(amount) ? amount : 0;
+  if (!Number.isFinite(amount)) {
+    throw new Error(`Invalid amount "${value}"`);
+  }
+  return amount;
 }
 
-function readCsv(filePath) {
-  const content = fs.readFileSync(filePath, "utf8");
-  const records = parse(content, {
-    columns: true,
-    skip_empty_lines: true,
-    trim: true
-  });
+function parseRow(row, index) {
+  const date = parseDate(row.Date, "yyyy-MM-dd", new Date());
+  if (!isValid(date)) {
+    throw new Error(`Invalid date on row ${index + 2}: "${row.Date}"`);
+  }
 
-  return records.map((row) => ({
-    date: parseDate(row.Date, "yyyy-MM-dd", new Date()),
+  return {
+    date,
     merchant: row.Merchant,
     category: row.Category,
     account: row.Account,
@@ -26,8 +27,22 @@ function readCsv(filePath) {
     amount: parseAmount(row.Amount),
     tags: row.Tags,
     owner: row.Owner
-  }));
+  };
 }
 
-module.exports = { readCsv };
+function parseCsvContent(content) {
+  const records = parse(content, {
+    columns: true,
+    skip_empty_lines: true,
+    trim: true
+  });
 
+  return records.map(parseRow);
+}
+
+function readCsv(filePath) {
+  const content = fs.readFileSync(filePath, "utf8");
+  return parseCsvContent(content);
+}
+
+module.exports = { parseCsvContent, readCsv };

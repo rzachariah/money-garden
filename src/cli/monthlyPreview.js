@@ -1,20 +1,16 @@
 const fs = require("fs");
 const path = require("path");
-const { parse } = require("date-fns");
+const { isValid, parse } = require("date-fns");
 
 const { readCsv } = require("../ingest/readCsv");
 const { classifyTransaction } = require("../budget/classify");
+const { loadBudgetConfig } = require("../config/loadBudgetConfig");
 const { getMonthRange } = require("../utils/date");
 const {
   buildMonthlySummary,
   buildMonthlyEmailHtml,
   buildMonthlyEmailText
 } = require("../digest/monthlyEmail");
-
-function loadConfig() {
-  const configPath = path.resolve(process.cwd(), "config", "budgets.json");
-  return JSON.parse(fs.readFileSync(configPath, "utf8"));
-}
 
 function findLatestCsv(dataDir) {
   const files = fs
@@ -40,7 +36,7 @@ function parseMonthArg(args) {
 }
 
 function main() {
-  const config = loadConfig();
+  const config = loadBudgetConfig();
   const dataDir = path.resolve(process.cwd(), "data");
   const outputDir = path.resolve(process.cwd(), "out");
   if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir, { recursive: true });
@@ -67,6 +63,9 @@ function main() {
   const monthDate = monthArg
     ? parse(monthArg, "yyyy-MM", new Date())
     : latestDate;
+  if (!isValid(monthDate)) {
+    throw new Error(`Invalid --month value "${monthArg}". Use yyyy-MM.`);
+  }
 
   const { start: monthStart, end: monthEnd } = getMonthRange(monthDate);
   const scope = (config.monthlyScope || "shared").toLowerCase();
@@ -95,4 +94,3 @@ function main() {
 }
 
 main();
-
