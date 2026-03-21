@@ -1,6 +1,7 @@
 node_modules/
 .next/
 out/
+cdk.out/
 .env.local
 data/*.csv
 !data/sample_transactions.csv

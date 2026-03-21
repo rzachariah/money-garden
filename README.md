@@ -47,26 +47,63 @@ files or results yet, which keeps the AWS footprint small.
 
 ## AWS deployment
 
-The cheapest path is AWS Amplify hosting a Next.js app.
+This repo now includes a CDK deployment path that packages the Next.js app as a
+container and runs it on ECS Fargate behind an Application Load Balancer.
 
-- Build command: `npm run build`
-- Start command: `npm start`
-- Runtime env vars:
-  - `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`
-  - `CLERK_SECRET_KEY`
-  - `NEXT_PUBLIC_CLERK_SIGN_IN_URL`
-  - `NEXT_PUBLIC_CLERK_SIGN_UP_URL`
+Tradeoff: this is a straightforward CDK setup, but it is not the cheapest AWS
+shape. If your top priority is minimizing cost, Amplify is still the better
+fit. ECS + ALB is more infrastructure and will usually cost meaningfully more
+than a near-zero-traffic static or Amplify-style setup.
 
-For your stated goal of keeping cost around $1/month, stay with this shape:
+### CDK prerequisites
+
+- AWS CLI configured against your account
+- Docker running locally
+- CDK bootstrap completed in your target account/region
+
+Bootstrap once per account/region:
+
+```bash
+npx cdk bootstrap
+```
+
+### Deploy with CDK
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+Deploy the stack and pass your Clerk values as CloudFormation parameters:
+
+```bash
+npx cdk deploy \
+  --parameters ClerkPublishableKey=pk_test_... \
+  --parameters ClerkSecretKey=sk_test_... \
+  --parameters ClerkSignInUrl=/sign-in \
+  --parameters ClerkSignUpUrl=/sign-up
+```
+
+The stack outputs an `AppUrl` value for the load balancer.
+
+### Runtime environment
+
+The ECS service sets:
+
+- `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`
+- `CLERK_SECRET_KEY`
+- `NEXT_PUBLIC_CLERK_SIGN_IN_URL`
+- `NEXT_PUBLIC_CLERK_SIGN_UP_URL`
+- `NEXT_PUBLIC_CLERK_SIGN_IN_FALLBACK_REDIRECT_URL`
+- `NEXT_PUBLIC_CLERK_SIGN_UP_FALLBACK_REDIRECT_URL`
+
+For your current MVP shape, keep it simple:
 
 - no database yet
 - no stored uploads
 - no background workers
 - no bank sync
-
-Amplify hosting plus low traffic is the most realistic way to keep the bill
-near that range, but AWS can still exceed it depending on traffic and build
-frequency, so this is a best-effort cost posture rather than a guarantee.
 
 ## Existing CLI previews
 
