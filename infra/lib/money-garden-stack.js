@@ -4,7 +4,6 @@ const ec2 = require("aws-cdk-lib/aws-ec2");
 const ecs = require("aws-cdk-lib/aws-ecs");
 const ecsPatterns = require("aws-cdk-lib/aws-ecs-patterns");
 const route53 = require("aws-cdk-lib/aws-route53");
-const targets = require("aws-cdk-lib/aws-route53-targets");
 
 class MoneyGardenStack extends cdk.Stack {
   constructor(scope, id, props) {
@@ -88,15 +87,14 @@ class MoneyGardenStack extends cdk.Stack {
       }
     });
 
+    service.loadBalancer.connections.allowFromAnyIpv4(
+      ec2.Port.tcp(443),
+      "Allow from anyone on port 443"
+    );
+
     service.targetGroup.configureHealthCheck({
       path: "/",
       healthyHttpCodes: "200-399"
-    });
-
-    new route53.ARecord(this, "AliasRecord", {
-      zone: hostedZone,
-      recordName: "moneygarden",
-      target: route53.RecordTarget.fromAlias(new targets.LoadBalancerTarget(service.loadBalancer))
     });
 
     new cdk.CfnOutput(this, "AppUrl", {
