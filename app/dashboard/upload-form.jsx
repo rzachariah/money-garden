@@ -32,7 +32,8 @@ export function UploadForm() {
           </button>
         </form>
         <p className="muted">
-          This MVP does not store uploads. It analyzes the file for the current request only.
+          Upload one month for a snapshot, or 3+ months for a calmer trend review. This
+          MVP does not store uploads and analyzes the file for the current request only.
         </p>
         {state.error ? <p className="error-text">{state.error}</p> : null}
         {state.fileName ? <p className="muted">Latest file: {state.fileName}</p> : null}
@@ -43,20 +44,29 @@ export function UploadForm() {
           <div className="analysis-stack">
             <div className="metric-strip">
               <div className="metric-card">
-                <span className="stat-label">Spend analyzed</span>
+                <span className="stat-label">{state.summary.reviewModeLabel}</span>
                 <strong>{state.summary.totalSpendLabel}</strong>
                 <p>{state.summary.monthLabel}</p>
               </div>
               <div className="metric-card">
-                <span className="stat-label">Type 2</span>
-                <strong>{state.summary.typeTotalsLabel.type2}</strong>
-                <p>Budget {state.summary.budgetsLabel.type2}</p>
+                <span className="stat-label">Upload span</span>
+                <strong>{state.summary.historyDepthLabel}</strong>
+                <p>{state.summary.uploadSpanLabel}</p>
               </div>
               <div className="metric-card">
-                <span className="stat-label">Type 3</span>
-                <strong>{state.summary.typeTotalsLabel.type3}</strong>
-                <p>Budget {state.summary.budgetsLabel.type3}</p>
+                <span className="stat-label">Flexible spend</span>
+                <strong>{state.summary.typeTotalsLabel.type2}</strong>
+                <p>Stretch spend {state.summary.typeTotalsLabel.type3}</p>
               </div>
+            </div>
+
+            <div className="recommendation-card">
+              <span className="stat-label">What stands out</span>
+              <ul>
+                {state.summary.insights.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
             </div>
 
             <div className="list-grid">
